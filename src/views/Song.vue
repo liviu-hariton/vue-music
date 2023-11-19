@@ -15,8 +15,8 @@
       </button>
       <div class="z-50 text-left ml-8">
         <!-- Song Info -->
-        <div class="text-3xl font-bold">{{ this.song.modified_name }}</div>
-        <div>{{ this.song.genre }}</div>
+        <div class="text-3xl font-bold">{{ song.modified_name }}</div>
+        <div>{{ song.genre }}</div>
       </div>
     </div>
   </section>
@@ -26,7 +26,7 @@
     <div class="bg-white rounded border border-gray-200 relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
         <!-- Comment Count -->
-        <span class="card-title">Comments ({{ this.song.comment_count }})</span>
+        <span class="card-title">Comments ({{ song.comment_count }})</span>
         <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
       </div>
 
@@ -60,6 +60,7 @@
         <!-- Sort Comments -->
         <select
           class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+          v-model="sort"
         >
           <option value="1">Latest</option>
           <option value="2">Oldest</option>
@@ -69,16 +70,19 @@
   </section>
   <!-- Comments -->
   <ul class="container mx-auto">
-    <li class="p-6 bg-gray-50 border border-gray-200">
+    <li
+      class="p-6 bg-gray-50 border border-gray-200"
+      v-for="comment in sortedComments"
+      :key="comment.docId"
+    >
       <!-- Comment Author -->
       <div class="mb-5">
-        <div class="font-bold">Elaine Dreyfuss</div>
-        <time>5 mins ago</time>
+        <div class="font-bold">{{ comment.name }}</div>
+        <time>{{ comment.datePosted }}</time>
       </div>
 
       <p>
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium der doloremque
-        laudantium.
+        {{ comment.content }}
       </p>
     </li>
   </ul>
@@ -101,11 +105,22 @@ export default {
       comment: '',
       comment_show_alert: false,
       comment_alert_msg: 'Please wait... Adding comment...',
-      comment_alert_variant: 'bg-blue-500'
+      comment_alert_variant: 'bg-blue-500',
+      comments: [],
+      sort: '1' // 1 = latest->oldest, 2 = oldest->latest
     }
   },
   computed: {
-    ...mapState(useUserStore, ['userLoggedIn'])
+    ...mapState(useUserStore, ['userLoggedIn']),
+    sortedComments() {
+      return this.comments.slice().sort((a, b) => {
+        if (this.sort === '1') {
+          return new Date(b.datePosted) - new Date(a.datePosted)
+        }
+
+        return new Date(a.datePosted) - new Date(b.datePosted)
+      })
+    }
   },
   async created() {
     const docSnapshot = await songsCollection.doc(this.$route.params.id).get()
@@ -116,7 +131,13 @@ export default {
       return
     }
 
+    const { sort } = this.$route.query
+
+    this.sort = sort === '1' || sort === '2' ? sort : '1'
+
     this.song = docSnapshot.data()
+
+    this.getComments()
   },
   methods: {
     async addComment(values, { resetForm }) {
@@ -125,6 +146,7 @@ export default {
       this.comment_alert_variant = 'bg-blue-500'
       this.comment_alert_msg = 'Please wait... Adding comment...'
 
+      // Add comment to comments collection
       const comment = {
         content: values.comment,
         datePosted: new Date().toString(),
@@ -143,12 +165,50 @@ export default {
         return
       }
 
+      // Update comment count in songs collection
+      this.song.comment_count += 1
+
+      await songsCollection.doc(this.$route.params.id).update({
+        comment_count: this.song.comment_count
+      })
+
+      // Update comments
+      await this.getComments()
+
       this.comment_in_submission = false
       this.comment_alert_variant = 'bg-green-500'
       this.comment_alert_msg = 'Comment added successfully.'
       this.comment_show_alert = true
 
       resetForm()
+    },
+    async getComments() {
+      const snapshots = await commentsCollection.where('sid', '==', this.$route.params.id).get()
+
+      this.comments = []
+
+      snapshots.forEach((doc) => {
+        this.comments.push({
+          docId: doc.id,
+          ...doc.data()
+        })
+      })
+    }
+  },
+  watch: {
+    sort(newVal) {
+      // Prevents the router from pushing the same query value
+      if (newVal === this.$route.query.sort) {
+        return
+      }
+
+      this.$router.push({
+        query: {
+          sort: newVal
+        }
+      })
+
+      this.getComments()
     }
   }
 }
