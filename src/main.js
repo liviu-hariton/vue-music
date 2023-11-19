@@ -10,10 +10,10 @@ import router from './router'
 import VeeValidatePlugin from './includes/validation'
 import { auth } from './includes/firebase'
 
-let app;
+let app
 
 auth.onAuthStateChanged(() => {
-  if(!app) {
+  if (!app) {
     app = createApp(App)
 
     app.use(createPinia())

@@ -10,8 +10,9 @@
       <button
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
+        @click.prevent="newSong(song)"
       >
-        <i class="fas fa-play"></i>
+        <i class="fas" :class="{ 'fa-play': !playing, 'fa-pause': playing }"></i>
       </button>
       <div class="z-50 text-left ml-8">
         <!-- Song Info -->
@@ -90,8 +91,9 @@
 
 <script>
 import { songsCollection, auth, commentsCollection } from '@/includes/firebase'
-import { mapState } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import useUserStore from '@/stores/user'
+import usePlayerStore from '@/stores/player'
 
 export default {
   name: 'Song',
@@ -112,6 +114,7 @@ export default {
   },
   computed: {
     ...mapState(useUserStore, ['userLoggedIn']),
+    ...mapState(usePlayerStore, ['playing']),
     sortedComments() {
       return this.comments.slice().sort((a, b) => {
         if (this.sort === '1') {
@@ -140,6 +143,7 @@ export default {
     this.getComments()
   },
   methods: {
+    ...mapActions(usePlayerStore, ['newSong']),
     async addComment(values, { resetForm }) {
       this.comment_in_submission = true
       this.comment_show_alert = true
