@@ -4,6 +4,7 @@ import useUserStore from "@/stores/user";
 import Home from '@/views/Home.vue'
 import About from '@/views/About.vue'
 import Manage from "@/views/Manage.vue";
+import Song from "@/views/Song.vue";
 import NotFound from "@/views/404.vue";
 
 const routes = [
@@ -37,6 +38,12 @@ const routes = [
     }
   },
   {
+    name: 'song',
+    path: '/song/:id',
+    component: Song,
+  },
+  {
+    name: 'not-found',
     path: '/:catchAll(.*)*',
     component: NotFound
   }
