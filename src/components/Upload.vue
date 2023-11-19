@@ -55,6 +55,7 @@ export default {
       uploads: []
     }
   },
+  props: ['addSong'],
   methods: {
     upload($event) {
       this.is_dragover = false
@@ -109,7 +110,11 @@ export default {
               url: await upload_task.snapshot.ref.getDownloadURL()
             }
 
-            await songsCollection.add(song)
+            const songRef = await songsCollection.add(song)
+
+            const songSnapshot = await songRef.get()
+
+            this.addSong(songSnapshot)
 
             this.uploads[upload_index].variant = 'bg-green-400'
             this.uploads[upload_index].icon = 'fas fa-check'
@@ -123,7 +128,7 @@ export default {
     // cancel all upload tasks
     this.uploads.forEach((upload) => {
       upload.upload_task.cancel()
-    });
+    })
   }
 }
 </script>
