@@ -1,5 +1,6 @@
 import './assets/base.css'
 import './assets/main.css'
+import 'nprogress/nprogress.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -16,10 +17,14 @@ import i18n from '@/includes/i18n'
 
 import GlobalComponents from './includes/_globals'
 
+import progressBar from '@/includes/progress-bar'
+
 import { registerSW } from 'virtual:pwa-register'
 registerSW({
   immediate: true
 })
+
+progressBar(router)
 
 let app
 
