@@ -1,10 +1,26 @@
 # vue-music
 
-## Learning Vue.js
+## Learning with Vue.js
 
 Music project - https://www.udemy.com/course/complete-vue-js-developer-zero-to-mastery-vuex/
 
+Vue Music app isn't just a utility; it's a learning journey. Developed using Vue.js, a progressive JavaScript framework, the project showcases the power of Vue.js in creating dynamic and interactive user interfaces. Dive into the source code to explore the intricacies of Vue.js and expand your skills.
+
 The live demo is here https://vue-music.lhdev.eu/
+
+Key Features:
+
+    User Account Management:
+    Easily sign up for a new account or log in to your existing one. We prioritize security and user privacy, ensuring a seamless and safe experience.
+
+    Upload and Manage Audio Files:
+    With AudioHub, you can effortlessly upload your favorite audio files, whether it's music, podcasts, or personal recordings. The intuitive interface allows you to organize and manage your audio library efficiently.
+
+    Intuitive Dashboard:
+    Navigate through your collection with an intuitive dashboard designed for simplicity and user-friendly interactions.
+
+    Responsive Design:
+    AudioHub is built with a responsive design, ensuring a seamless experience across various devices. Whether you're using a desktop, tablet, or smartphone, you can enjoy the same level of functionality and aesthetics.
 
 ## Customize configuration
 
