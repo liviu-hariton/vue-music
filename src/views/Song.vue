@@ -27,7 +27,10 @@
     <!-- Form -->
     <section class="container mx-auto mt-6" id="comments">
       <div class="bg-white rounded border border-gray-200 relative flex flex-col">
-        <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200" v-icon-secondary="{ icon: 'comments', right: true }">
+        <div
+          class="px-6 pt-6 pb-5 font-bold border-b border-gray-200"
+          v-icon-secondary="{ icon: 'comments', right: true }"
+        >
           <!-- Comment Count -->
           <span class="card-title">
             {{ $tc('song.comment_count', song.comment_count, { count: song.comment_count }) }}
@@ -135,22 +138,24 @@ export default {
       })
     }
   },
-  async created() {
-    const docSnapshot = await songsCollection.doc(this.$route.params.id).get()
+  async beforeRouteEnter(to, from, next) {
+    const docSnapshot = await songsCollection.doc(to.params.id).get()
 
-    if (!docSnapshot.exists) {
-      this.$router.push({ name: 'not-found' })
+    next((vm) => {
+      if (!docSnapshot.exists) {
+        vm.$router.push({ name: 'not-found' })
 
-      return
-    }
+        return
+      }
 
-    const { sort } = this.$route.query
+      const { sort } = vm.$route.query
 
-    this.sort = sort === '1' || sort === '2' ? sort : '1'
+      vm.sort = sort === '1' || sort === '2' ? sort : '1'
 
-    this.song = docSnapshot.data()
+      vm.song = docSnapshot.data()
 
-    this.getComments()
+      vm.getComments()
+    })
   },
   methods: {
     ...mapActions(usePlayerStore, ['newSong']),
