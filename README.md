@@ -4,6 +4,8 @@
 
 Music project - https://www.udemy.com/course/complete-vue-js-developer-zero-to-mastery-vuex/
 
+The live demo is here https://vue-music.lhdev.eu/
+
 ## Customize configuration
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
