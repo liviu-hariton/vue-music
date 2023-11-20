@@ -1,0 +1,13 @@
+{
+  "home": {
+    "intro_title": "Listen to Great Music!",
+    "intro_text": "Listen to your favorite music, create your own playlists, follow your favorite artists and discover new ones."
+  },
+  "song": {
+    "comment_count": "No comments | 1 comment | {count} comments"
+  },
+  "register": {
+    "accept": "I accept the {0}",
+    "tos": "Terms of Service"
+  }
+}

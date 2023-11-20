@@ -19,6 +19,7 @@
           <!-- Song Info -->
           <div class="text-3xl font-bold">{{ song.modified_name }}</div>
           <div>{{ song.genre }}</div>
+          <div class="song-price">{{ $n(1, 'currency') }}</div>
         </div>
       </div>
     </section>
@@ -26,10 +27,11 @@
     <!-- Form -->
     <section class="container mx-auto mt-6" id="comments">
       <div class="bg-white rounded border border-gray-200 relative flex flex-col">
-        <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
+        <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200" v-icon-secondary="{ icon: 'comments', right: true }">
           <!-- Comment Count -->
-          <span class="card-title">Comments ({{ song.comment_count }})</span>
-          <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
+          <span class="card-title">
+            {{ $tc('song.comment_count', song.comment_count, { count: song.comment_count }) }}
+          </span>
         </div>
 
         <div class="p-6">
@@ -98,8 +100,13 @@ import { mapState, mapActions } from 'pinia'
 import useUserStore from '@/stores/user'
 import usePlayerStore from '@/stores/player'
 
+import IconSecondary from '@/directives/icon-secondary'
+
 export default {
   name: 'Song',
+  directives: {
+    'icon-secondary': IconSecondary
+  },
   data() {
     return {
       song: {},

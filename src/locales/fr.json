@@ -1,0 +1,13 @@
+{
+  "home": {
+    "intro_title": "Écoutez de la bonne musique!",
+    "intro_text": "Écoutez votre musique préférée, créez vos propres playlists, suivez vos artistes préférés et découvrez-en de nouveaux."
+  },
+  "song": {
+    "comment_count": "Sans commentaires | 1 commentaire | {count} commentaires"
+  },
+  "register": {
+    "accept": "J'accepte le {0}",
+    "tos": "Conditions d'utilisation"
+  }
+}
